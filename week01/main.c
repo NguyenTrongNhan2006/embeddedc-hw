@@ -5,40 +5,37 @@
 
 // TASK 1: POINTERS & MEMORY
 
-void parse_config(const uint8_t *config_packet, int16_t *high_threshold) {
+void parse_config(const uint8_t *config_packet, int16_t *high_threshold)
+{
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
-
-
+    // abcd
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
 }
 
 // TASK 2: COMPILER & VOLATILE
 
-int16_t read_temperature_reg(void *hw_sensor_reg) {
+int16_t read_temperature_reg(void *hw_sensor_reg)
+{
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
-
-
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
 }
 
 // TASK 3: DATA TYPES & BITWISE OPERATIONS
 
-void control_output(uint8_t *control_reg, uint8_t fan_enable, uint8_t alarm_enable) {
+void control_output(uint8_t *control_reg, uint8_t fan_enable, uint8_t alarm_enable)
+{
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
-
-
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
 }
 
 // HÀM MAIN KIỂM TRA (Học viên giữ nguyên để chạy thử nghiệm, chỉ thay đổi input nếu cần)
 
-int main() {
+int main()
+{
 
     // 1. Test Task 1
     int16_t threshold = 0;
@@ -47,13 +44,14 @@ int main() {
     printf("Threshold Parsed: %d C\n", threshold);
 
     // 2. Test Task 2
-    volatile int16_t mock_hardware_sensor = 105; 
-    int16_t current_temp = read_temperature_reg((void*)&mock_hardware_sensor);
+    volatile int16_t mock_hardware_sensor = 105;
+    int16_t current_temp = read_temperature_reg((void *)&mock_hardware_sensor);
     printf("Current Temp Read: %d C\n", current_temp);
 
     // 3. Test Task 3
     uint8_t system_control_register = 0xFC; // 1111 1100
-    if (current_temp >= threshold) {
+    if (current_temp >= threshold)
+    {
         // Yêu cầu: fan = 1, alarm = 0
         control_output(&system_control_register, 1, 0);
     }
