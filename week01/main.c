@@ -50,6 +50,31 @@ void control_output(uint8_t *control_reg, uint8_t fan_enable, uint8_t alarm_enab
 {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
+    uint8_t output_bits;
+    uint8_t output_mask;
+
+    if (control_reg == 0)
+    {
+        return;
+    }
+    // Khởi tạo output_bits và output_mask để chuẩn bị cho việc thiết lập các bit điều khiển quạt và báo động trong thanh ghi điều khiển.
+
+    output_bits = 0;
+    output_mask = (uint8_t)((1U << 0) | (1U << 1));
+    // output_mask = 0b00000011, dùng để xác định các bit cần thay đổi trong thanh ghi điều khiển.
+    // Kiểm tra các tham số fan_enable và alarm_enable để xác định xem có cần bật quạt hoặc báo động hay không. Nếu fan_enable khác 0, thiết lập bit 0 của output_bits. Nếu alarm_enable khác 0, thiết lập bit 1 của output_bits.
+    if (fan_enable != 0)
+    {
+        output_bits = (uint8_t)(output_bits | (1U << 0));
+    }
+
+    if (alarm_enable != 0)
+    {
+        output_bits = (uint8_t)(output_bits | (1U << 1));
+    }
+
+    // Cập nhật giá trị của thanh ghi điều khiển bằng cách sử dụng toán tử bitwise. Đầu tiên, xóa các bit cần thay đổi bằng cách AND với NOT của output_mask, sau đó OR với output_bits để thiết lập các bit mới.
+    *control_reg = (uint8_t)((*control_reg & (uint8_t)(~output_mask)) | output_bits);
     // HỌC VIÊN KẾT THÚC VIẾT CODE
 }
 
