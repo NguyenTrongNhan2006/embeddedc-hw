@@ -17,18 +17,29 @@ void parse_config(const uint8_t *config_packet, int16_t *high_threshold)
     {
         return;
     }
-    // Ghép 2 byte từ config_packet LSB & MSB thành một số nguyên 16-bit và lưu vào high_threshold
+    // Ghép 2 byte từ config_packet LSB & MSB thành một số nguyên 16-bit và lưu vào high_threshold , ép kiểu dữ liệu 16 bit khai báo từ LSB -> MSB (Phép dịch bit) : Little  Endian
     *high_threshold = (int16_t)(((uint16_t)config_packet[0]) |
                                 ((uint16_t)config_packet[1] << 8));
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
 }
 
-// TASK 2: COMPILER & VOLATILE
+// TASK 2: COMPILER & VOLATILE : Đọc thanh ghi cảm biến phần cứng
 
 int16_t read_temperature_reg(void *hw_sensor_reg)
 {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
+
+    // Kiểm tra NULL pointer để tránh crash
+    if (hw_sensor_reg == 0)
+    {
+        return 0;
+    }
+    // Khai báo con trỏ volatile int16_t trỏ đến địa chỉ thanh ghi cảm biến phần cứng
+    // volatile được sử dụng để thông báo cho trình biên dịch rằng giá trị của biến có thể thay đổi bất cứ lúc nào không phải do code C/C++ thay đổi, do đó trình biên dịch sẽ không tối ưu hóa việc đọc giá trị từ thanh ghi này.
+    volatile int16_t *sensor_reg = (volatile int16_t *)hw_sensor_reg;
+
+    return *sensor_reg;
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
 }
