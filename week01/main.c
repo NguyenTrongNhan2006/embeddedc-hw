@@ -26,6 +26,7 @@ void parse_config(const uint8_t *config_packet, int16_t *high_threshold)
 
 // TASK 2: COMPILER & VOLATILE : Đọc thanh ghi cảm biến phần cứng
 
+// 
 int16_t read_temperature_reg(void *hw_sensor_reg)
 {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
@@ -70,7 +71,7 @@ void control_output(uint8_t *control_reg, uint8_t fan_enable, uint8_t alarm_enab
 
     if (alarm_enable != 0)
     {
-        output_bits = (uint8_t)(output_bits | (1U << 1));
+        output_bits = (uint8_t)(output_bits | (1U << 1)); 
     }
 
     // Cập nhật giá trị của thanh ghi điều khiển bằng cách sử dụng toán tử bitwise. Đầu tiên, xóa các bit cần thay đổi bằng cách AND với NOT của output_mask, sau đó OR với output_bits để thiết lập các bit mới.
