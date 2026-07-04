@@ -10,8 +10,10 @@ typedef union {
     struct {
         // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
-        
-       // ABCD
+        uint16_t PWR_ON        : 1;
+        uint16_t ASSIST_LEVEL  : 2;
+        uint16_t LIGHT_BRIGHT  : 4;
+        uint16_t RESERVED      : 9;
 
         // HỌC VIÊN KẾT THÚC VIẾT CODE
     } fields;
@@ -32,7 +34,15 @@ void drive_sport(void) {
 
 // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
+typedef void (*Drive_Mode_Handler_t)(void);
 
+#define DRIVE_MODE_COUNT 3U
+
+Drive_Mode_Handler_t drive_modes[DRIVE_MODE_COUNT] = {
+    drive_eco,
+    drive_normal,
+    drive_sport
+};
 
 
 // HỌC VIÊN KẾT THÚC VIẾT CODE
@@ -45,7 +55,9 @@ void Battery_Monitor(void (*overheat_cb)(void)) {
     
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
-
+    if ((battery_temp > 40) && (overheat_cb != NULL)) {
+        (*overheat_cb)();
+    }
 
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
@@ -61,10 +73,22 @@ void Critical_Battery_Handler(void) {
 const char BIKE_MODEL[] = "E-Bike X2026"; 
 uint32_t total_odometer = 0;             
 
+static void stack_overflow_recursive(unsigned depth) {
+    volatile uint8_t stack_load[1024];
+    volatile unsigned keep_running = 1U;
+
+    stack_load[0] = (uint8_t)depth;
+    stack_load[sizeof(stack_load) - 1U] = (uint8_t)(depth >> 8);
+
+    if (keep_running != 0U) {
+        stack_overflow_recursive(depth + 1U);
+    }
+}
+
 void crash_simulation(void) {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
-
+    stack_overflow_recursive(0U);
 
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
@@ -86,7 +110,12 @@ int main() {
     printf("ENGINE CONTROLLING: \n");
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
-
+    if ((my_bike.fields.ASSIST_LEVEL < DRIVE_MODE_COUNT) &&
+        (drive_modes[my_bike.fields.ASSIST_LEVEL] != NULL)) {
+        (*drive_modes[my_bike.fields.ASSIST_LEVEL])();
+    } else {
+        printf("Invalid assist level.\n");
+    }
 
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
