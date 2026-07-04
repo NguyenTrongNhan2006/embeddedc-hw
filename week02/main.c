@@ -10,8 +10,8 @@ typedef union {
     struct {
         // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
 
-
-
+        
+       // ABCD
 
         // HỌC VIÊN KẾT THÚC VIẾT CODE
     } fields;
