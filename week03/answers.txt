@@ -1,0 +1,59 @@
+========================
+HW03 - Answers
+========================
+
+Task 1
+
+1.1
+- CMake: Generate build files from CMakeLists.txt.
+- Ninja: Fast incremental build tool.
+- arm-none-eabi-gcc: Compile C source to object/executable.
+- STM32_Programmer_CLI: Flash firmware to STM32.
+
+1.2
+Flow:
+CMake
+→ Ninja
+→ GCC Compiler + Linker
+→ .bin/.elf
+→ STM32_Programmer_CLI
+→ STM32 MCU
+
+--------------------------------------------------
+
+Task 2
+
+2.1
+- .o files are separate object files and cannot run independently.
+- Linker combines all .o files, resolves symbols, assigns memory addresses, and generates the final .elf/.bin for STM32.
+
+2.2
+- Ninja only rebuilds modified files (Incremental Build).
+- It checks file timestamps and dependency information to detect changed source files.
+
+--------------------------------------------------
+
+Task 3
+
+3.1
+- LMA: Address where initialized data is stored in Flash.
+- VMA: Address where data is used in RAM during execution.
+- Startup code copies data from LMA → VMA after reset.
+
+3.2
+- Initialized global variables will contain incorrect values.
+- Program behavior may become unpredictable.
+
+--------------------------------------------------
+
+Task 4
+
+4.1
+cmake -B build -G Ninja
+
+4.2
+cmake --build build
+
+--------------------------------------------------
+
+
