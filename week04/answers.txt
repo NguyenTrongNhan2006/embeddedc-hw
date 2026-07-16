@@ -1,0 +1,59 @@
+==========================
+Task 1: Kiến trúc Phần cứng
+==========================
+
+1.1:
+GPIO Output Push-Pull sử dụng hai transistor bổ sung:
+- PMOS ở phía trên (kết nối với VDD = 3.3V).
+- NMOS ở phía dưới (kết nối với GND = 0V).
+
+Khi xuất mức logic 1 (HIGH):
+- PMOS bật (ON).
+- NMOS tắt (OFF).
+- Chân GPIO được nối trực tiếp lên nguồn 3.3V nên xuất ra mức HIGH.
+
+Khi xuất mức logic 0 (LOW):
+- PMOS tắt (OFF).
+- NMOS bật (ON).
+- Chân GPIO được nối trực tiếp xuống GND nên xuất ra mức LOW.
+
+Thiết kế này giúp chân GPIO vừa có thể cấp dòng (Source Current) vừa có thể hút dòng (Sink Current), đồng thời tránh xảy ra ngắn mạch giữa VDD và GND vì hai transistor không được bật cùng lúc.
+
+------------------------------------------------
+
+1.2:
+Chế độ Input Pull-up được sử dụng khi chân Input có thể bị hở (không có mức điện áp xác định), ví dụ:
+- Đọc nút nhấn.
+- Đọc công tắc.
+- Đọc tín hiệu dạng Open-Drain/Open-Collector.
+
+Điện trở Pull-up bên trong sẽ kéo chân GPIO lên mức HIGH (3.3V) khi không có thiết bị nào tác động.
+
+Nếu chân GPIO được cấu hình là Input Floating (không Pull-up, không Pull-down) và không nối vào đâu thì chân sẽ ở trạng thái "Floating".
+
+Khi đó:
+- Điện áp trên chân không xác định.
+- Chân dễ bị nhiễu điện từ từ môi trường.
+- Giá trị đọc từ thanh ghi Input Data Register (IDR) sẽ thay đổi ngẫu nhiên giữa 0 và 1.
+- Chương trình có thể hoạt động không ổn định hoặc sinh lỗi.
+
+==========================
+Task 2: Quy trình cấu hình ngoại vi
+==========================
+
+Sau khi Reset, STM32 mặc định tắt Clock của hầu hết các ngoại vi nhằm:
+
+- Giảm tiêu thụ điện năng.
+- Tiết kiệm năng lượng cho các ngoại vi không sử dụng.
+- Giảm nhiệt lượng của chip.
+- Cho phép người lập trình chủ động chỉ bật những ngoại vi cần thiết.
+
+Nếu cấu hình các thanh ghi của GPIO nhưng quên Enable Clock cho Port đó thì:
+
+- Bus APB/AHB sẽ không cấp xung nhịp cho ngoại vi.
+- GPIO không hoạt động.
+- Các thanh ghi của GPIO không được cập nhật hoặc không phản hồi đúng.
+- Chương trình có thể ghi vào thanh ghi nhưng phần cứng sẽ bỏ qua các giá trị này.
+- LED sẽ không sáng, nút nhấn không đọc được hoặc ngoại vi hoạt động sai.
+
+Vì vậy, bước đầu tiên khi cấu hình bất kỳ ngoại vi nào trên STM32 luôn là Enable Peripheral Clock trước khi cấu hình các thanh ghi chức năng.
